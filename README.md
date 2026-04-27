@@ -62,7 +62,7 @@ Siga estos pasos para desplegar el servidor localmente en Windows:
 
 ## 📊 Diagrama Entidad-Relación (ERD)
 
-Estructura relacional centralizada en el paciente para evitar "islas de datos":
+Estructura relacional completa diseñada para mantener la integridad referencial:
 
 ```mermaid
 erDiagram
@@ -73,31 +73,98 @@ erDiagram
     md_pacientes ||--o{ md_defunciones : "pertenece"
     md_pacientes ||--o{ md_documentos_oficiales : "identifica"
     md_pacientes ||--o{ md_valoraciones : "evalúa"
-    
     md_notas_medicas ||--o{ md_diagnostico : "genera"
     md_diagnostico ||--o{ md_tratamientos : "prescribe"
-    
     md_domicilios ||--o{ md_personas_tiene_domicilio : "pertenece"
-    
+
+    md_usuarios {
+        int id PK
+        string username
+        string email
+        string password_hash
+        string role
+        datetime created_at
+    }
+
     md_pacientes {
         int id PK
         string nombre
         string curp
+        datetime fecha_registro
         datetime created_at
     }
-    
+
     md_notas_medicas {
         int id PK
         int paciente_id FK
         int medico_id FK
         text contenido
         enum tipo_nota
+        datetime fecha
     }
 
-    md_usuarios {
+    md_signos_vitales {
         int id PK
-        string username
-        string role
+        int paciente_id FK
+        string tension_arterial
+        int frecuencia_cardiaca
+        decimal temperatura
+        datetime fecha
+    }
+
+    md_diagnostico {
+        int id PK
+        int nota_id FK
+        text descripcion
+        string codigo_cie
+    }
+
+    md_tratamientos {
+        int id PK
+        int diagnostico_id FK
+        string medicamento
+        string dosis
+        string frecuencia
+        string duracion
+    }
+
+    md_nacimientos {
+        int id PK
+        int paciente_id FK
+        date fecha_nacimiento
+        string lugar
+        string nombre_madre
+    }
+
+    md_defunciones {
+        int id PK
+        int paciente_id FK
+        datetime fecha_defuncion
+        text causa
+    }
+
+    md_documentos_oficiales {
+        int id PK
+        int paciente_id FK
+        string tipo_documento
+        string numero_documento
+    }
+
+    md_domicilios {
+        int id PK
+        string calle
+        string colonia
+        string municipio
+        string estado
+        string cp
+    }
+
+    md_valoraciones {
+        int id PK
+        int paciente_id FK
+        string escala
+        text resultado
+        text observaciones
     }
 ```
 
