@@ -1,105 +1,129 @@
-# Medical Register API (Módulo de Registros Médicos)
+# 🏥 Medical Register API (Módulo de Registros Médicos)
 
-Esta es una API robusta construida con el stack MERN (Node.js, Express, MongoDB) para gestionar el módulo de Registros Médicos de un sistema de salud. Incluye autenticación mediante JWT y protección de rutas.
+![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+![MySQL](https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
+![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-D71F00?style=for-the-badge&logo=sqlalchemy&logoColor=white)
 
-## Tecnologías Utilizadas
+API robusta y escalable diseñada para la gestión integral de registros médicos en un entorno hospitalario. Implementa autenticación segura, relaciones complejas de base de datos y documentación interactiva.
 
-- **Node.js**: Entorno de ejecución para JavaScript.
-- **Express.js**: Framework para el desarrollo de APIs.
-- **MongoDB Atlas**: Base de Datos NoSQL en la nube.
-- **Mongoose**: ODM para el modelado de datos.
-- **JWT (JSON Web Tokens)**: Seguridad y autenticación de usuarios.
-- **Bcryptjs**: Encriptación de contraseñas.
-- **Cors**: Control de acceso de recursos cruzados.
+## 🚀 Tecnologías Utilizadas
 
-## Instalación y Configuración
+- **Python 3.12+**: Lenguaje de programación base.
+- **FastAPI**: Framework moderno y de alto rendimiento para construir APIs.
+- **MySQL**: Sistema de gestión de base de datos relacional.
+- **SQLAlchemy**: ORM para la gestión eficiente de modelos y relaciones.
+- **JWT (JSON Web Tokens)**: Sistema de autenticación y autorización.
+- **Bcrypt**: Encriptación de alta seguridad para contraseñas.
+- **Uvicorn**: Servidor ASGI de alto rendimiento.
 
-Siga estos pasos para inicializar el proyecto localmente:
+## 🛠️ Instalación y Configuración
+
+Siga estos pasos para desplegar el servidor localmente en Windows:
 
 1. **Clonar el repositorio**:
-   ```bash
-   git clone <url-del-repositorio>
-   cd medical-register-api
+   ```powershell
+   git clone https://github.com/AngelJdev/MEDICAL_REGISTER_API.git
+   cd MEDICAL_REGISTER_API
    ```
 
-2. **Instalar dependencias**:
-   ```bash
-   npm install
+2. **Crear y activar entorno virtual**:
+   ```powershell
+   python -m venv venv
+   .\venv\Scripts\activate
    ```
 
-3. **Configurar variables de entorno**:
-   Cree un archivo `.env` en la raíz del proyecto con el siguiente contenido (reemplace con sus credenciales de MongoDB Atlas):
+3. **Instalar dependencias**:
+   ```powershell
+   pip install -r requirements.txt
+   ```
+
+4. **Configurar base de datos**:
+   Asegúrese de tener un archivo `.env` configurado con sus credenciales de MySQL:
    ```env
-   PORT=5000
-   MONGODB_URI=mongodb+srv://<usuario>:<password>@cluster.mongodb.net/medical_register
-   JWT_SECRET=tu_secreto_super_seguro
-   NODE_ENV=development
+   DB_USER=root
+   DB_PASSWORD=tu_password
+   DB_HOST=localhost
+   DB_PORT=3306
+   DB_NAME=medical_register_db
+   SECRET_KEY=tu_secreto_para_jwt
    ```
 
-4. **Iniciar el servidor**:
-   ```bash
-   npm start
+5. **Inicializar y Sembrar DB**:
+   ```powershell
+   python seed_db.py
    ```
-   *Nota: Asegúrese de tener configurado el script "start" en su package.json.*
 
-## Diagrama de Entidad-Relación (ERD)
+6. **Iniciar servidor**:
+   ```powershell
+   python main.py
+   ```
 
-A continuación se presenta la estructura de las colecciones utilizadas (todas con el prefijo `md_`):
+## 📊 Diagrama Entidad-Relación (ERD)
+
+Estructura relacional centralizada en el paciente para evitar "islas de datos":
 
 ```mermaid
 erDiagram
-    md_usuarios ||--o{ md_notas_medicas : crea
-    md_notas_medicas ||--o{ md_diagnostico : tiene
-    md_diagnostico ||--o{ md_tratamientos : prescribe
-    md_signos_vitales }o--|| md_personas : registra
-    md_nacimientos }o--|| md_personas : registra
-    md_defunciones }o--|| md_personas : registra
-    md_documentos_oficiales }o--|| md_personas : identifica
-    md_domicilios ||--o{ md_personas_tiene_domicilio : pertenece
-    md_personas_tiene_domicilio }o--|| md_personas : vincula
-    md_valoraciones }o--|| md_personas : califica
-
+    md_usuarios ||--o{ md_notas_medicas : "crea"
+    md_pacientes ||--o{ md_notas_medicas : "tiene"
+    md_pacientes ||--o{ md_signos_vitales : "registra"
+    md_pacientes ||--o{ md_nacimientos : "pertenece"
+    md_pacientes ||--o{ md_defunciones : "pertenece"
+    md_pacientes ||--o{ md_documentos_oficiales : "identifica"
+    md_pacientes ||--o{ md_valoraciones : "evalúa"
+    
+    md_notas_medicas ||--o{ md_diagnostico : "genera"
+    md_diagnostico ||--o{ md_tratamientos : "prescribe"
+    
+    md_domicilios ||--o{ md_personas_tiene_domicilio : "pertenece"
+    
+    md_pacientes {
+        int id PK
+        string nombre
+        string curp
+        datetime created_at
+    }
+    
     md_notas_medicas {
-        string paciente_id
-        string medico_id
-        string contenido
-        date fecha
+        int id PK
+        int paciente_id FK
+        int medico_id FK
+        text contenido
+        enum tipo_nota
     }
-    md_signos_vitales {
-        string paciente_id
-        string tension_arterial
-        number temperatura
-    }
-    md_diagnostico {
-        string nota_id
-        string descripcion
-        string codigo_cie
-    }
-    md_tratamientos {
-        string diagnostico_id
-        string medicamento
-        string dosis
-    }
-    md_domicilios {
-        string calle
-        string colonia
-        string municipio
+
+    md_usuarios {
+        int id PK
+        string username
+        string role
     }
 ```
 
-## Endpoints Principales
+## 🧪 Guía de Pruebas (JSONs)
 
-Todos los endpoints médicos requieren el encabezado `Authorization: Bearer <token>`.
+Para una revisión exitosa en Swagger (`/docs`), siga este orden lógico para mantener la integridad de los datos:
 
-- **Auth**: `POST /api/auth/login`, `POST /api/auth/register`
-- **Notas Médicas**: `/api/medical/notas-medicas`
-- **Signos Vitales**: `/api/medical/signos-vitales`
-- **Diagnóstico**: `/api/medical/diagnostico`
-- **Tratamientos**: `/api/medical/tratamientos`
-- **Nacimientos**: `/api/medical/nacimientos`
-- **Defunciones**: `/api/medical/defunciones`
-- **Documentos Oficiales**: `/api/medical/documentos-oficiales`
-- **Domicilios**: `/api/medical/domicilios`
-- **Personas-Domicilio**: `/api/medical/personas-domicilio`
-- **Valoraciones**: `/api/medical/valoraciones`
-"# MEDICAL_REGISTER_API" 
+### 1. Paciente (Base de todo)
+```json
+{ "nombre": "Angel de Jesus", "curp": "BATA050726HPLXLNA9" }
+```
+
+### 2. Nota Médica (Requiere Paciente 1 y Médico 1)
+```json
+{ "paciente_id": 1, "medico_id": 1, "contenido": "Paciente estable.", "tipo_nota": "Consulta" }
+```
+
+### 3. Diagnóstico (Requiere Nota 1)
+```json
+{ "nota_id": 1, "descripcion": "Revisión General", "codigo_cie": "Z00" }
+```
+
+### 4. Tratamiento (Requiere Diagnóstico 1)
+```json
+{ "diagnostico_id": 1, "medicamento": "Vitaminas", "dosis": "1 tableta", "frecuencia": "Diaria", "duracion": "30 dias" }
+```
+
+---
+Desarrollado con ❤️ por el equipo de Registros Médicos.
