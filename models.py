@@ -21,6 +21,7 @@ class Paciente(Base):
     nombre = Column(String(100), nullable=False)
     curp = Column(String(20), unique=True)
     fecha_registro = Column(DateTime, server_default=func.now())
+    created_at = Column(DateTime, server_default=func.now())
 
     notas = relationship("NotaMedica", back_populates="paciente")
     signos = relationship("SignosVitales", back_populates="paciente")
@@ -37,6 +38,7 @@ class NotaMedica(Base):
     contenido = Column(Text, nullable=False)
     tipo_nota = Column(Enum('Consulta', 'Evolución', 'Interconsulta'), default='Consulta')
     fecha = Column(DateTime, server_default=func.now())
+    created_at = Column(DateTime, server_default=func.now())
     
     paciente = relationship("Paciente", back_populates="notas")
     medico = relationship("User", back_populates="notas_creadas")
@@ -54,6 +56,7 @@ class SignosVitales(Base):
     peso = Column(Numeric(5,2))
     talla = Column(Numeric(5,2))
     fecha = Column(DateTime, server_default=func.now())
+    created_at = Column(DateTime, server_default=func.now())
 
     paciente = relationship("Paciente", back_populates="signos")
 
@@ -76,6 +79,7 @@ class Tratamiento(Base):
     dosis = Column(String(50), nullable=False)
     frecuencia = Column(String(50))
     duracion = Column(String(50))
+    created_at = Column(DateTime, server_default=func.now())
     
     diagnostico = relationship("Diagnostico", back_populates="tratamientos")
 
@@ -87,6 +91,7 @@ class Nacimiento(Base):
     lugar = Column(String(255))
     nombre_madre = Column(String(100))
     nombre_padre = Column(String(100))
+    created_at = Column(DateTime, server_default=func.now())
 
     paciente = relationship("Paciente", back_populates="nacimiento")
 
@@ -97,6 +102,7 @@ class Defuncion(Base):
     fecha_defuncion = Column(DateTime, nullable=False)
     causa = Column(Text, nullable=False)
     lugar = Column(String(255))
+    created_at = Column(DateTime, server_default=func.now())
 
     paciente = relationship("Paciente", back_populates="defuncion")
 
@@ -107,6 +113,7 @@ class DocumentoOficial(Base):
     tipo_documento = Column(String(50), nullable=False)
     numero_documento = Column(String(50), nullable=False)
     fecha_emision = Column(Date)
+    created_at = Column(DateTime, server_default=func.now())
 
     paciente = relationship("Paciente", back_populates="documentos")
 
@@ -120,6 +127,7 @@ class Domicilio(Base):
     municipio = Column(String(100))
     estado = Column(String(100))
     cp = Column(String(10))
+    created_at = Column(DateTime, server_default=func.now())
 
 class PersonaTieneDomicilio(Base):
     __tablename__ = "md_personas_tiene_domicilio"
@@ -127,6 +135,7 @@ class PersonaTieneDomicilio(Base):
     persona_id = Column(String(50), nullable=False)
     domicilio_id = Column(Integer, ForeignKey("md_domicilios.id"))
     tipo_relacion = Column(String(50))
+    created_at = Column(DateTime, server_default=func.now())
 
 class Valoracion(Base):
     __tablename__ = "md_valoraciones"
@@ -135,5 +144,6 @@ class Valoracion(Base):
     escala = Column(String(50), nullable=False)
     resultado = Column(Text, nullable=False)
     observaciones = Column(Text)
+    created_at = Column(DateTime, server_default=func.now())
 
     paciente = relationship("Paciente", back_populates="valoraciones")

@@ -26,7 +26,7 @@ class Token(BaseModel):
 
 class PacienteBase(BaseModel):
     nombre: str
-    curp: Optional[str]
+    curp: Optional[str] = None
 
 class PacienteCreate(PacienteBase):
     pass
@@ -34,6 +34,7 @@ class PacienteCreate(PacienteBase):
 class Paciente(PacienteBase):
     id: int
     fecha_registro: datetime
+    created_at: Optional[datetime] = None
     class Config:
         from_attributes = True
 
@@ -49,6 +50,7 @@ class NotaMedicaCreate(NotaMedicaBase):
 class NotaMedica(NotaMedicaBase):
     id: int
     fecha: datetime
+    created_at: Optional[datetime] = None
     class Config:
         from_attributes = True
 
@@ -56,11 +58,11 @@ class SignosVitalesBase(BaseModel):
     paciente_id: int
     tension_arterial: str
     frecuencia_cardiaca: int
-    frecuencia_respiratoria: Optional[int]
+    frecuencia_respiratoria: Optional[int] = None
     temperatura: Decimal
-    saturacion_oxigeno: Optional[int]
-    peso: Optional[Decimal]
-    talla: Optional[Decimal]
+    saturacion_oxigeno: Optional[int] = None
+    peso: Optional[Decimal] = None
+    talla: Optional[Decimal] = None
 
 class SignosVitalesCreate(SignosVitalesBase):
     pass
@@ -68,13 +70,14 @@ class SignosVitalesCreate(SignosVitalesBase):
 class SignosVitales(SignosVitalesBase):
     id: int
     fecha: datetime
+    created_at: Optional[datetime] = None
     class Config:
         from_attributes = True
 
 class DiagnosticoBase(BaseModel):
     nota_id: int
     descripcion: str
-    codigo_cie: Optional[str]
+    codigo_cie: Optional[str] = None
 
 class DiagnosticoCreate(DiagnosticoBase):
     pass
@@ -89,29 +92,31 @@ class TratamientoBase(BaseModel):
     diagnostico_id: int
     medicamento: str
     dosis: str
-    frecuencia: Optional[str]
-    duracion: Optional[str]
+    frecuencia: Optional[str] = None
+    duracion: Optional[str] = None
 
 class TratamientoCreate(TratamientoBase):
     pass
 
 class Tratamiento(TratamientoBase):
     id: int
+    created_at: Optional[datetime] = None
     class Config:
         from_attributes = True
 
 class NacimientoBase(BaseModel):
     paciente_id: int
     fecha_nacimiento: date
-    lugar: Optional[str]
-    nombre_madre: Optional[str]
-    nombre_padre: Optional[str]
+    lugar: Optional[str] = None
+    nombre_madre: Optional[str] = None
+    nombre_padre: Optional[str] = None
 
 class NacimientoCreate(NacimientoBase):
     pass
 
 class Nacimiento(NacimientoBase):
     id: int
+    created_at: Optional[datetime] = None
     class Config:
         from_attributes = True
 
@@ -126,6 +131,7 @@ class DefuncionCreate(DefuncionBase):
 
 class Defuncion(DefuncionBase):
     id: int
+    created_at: Optional[datetime] = None
     class Config:
         from_attributes = True
 
@@ -133,30 +139,32 @@ class DocumentoBase(BaseModel):
     paciente_id: int
     tipo_documento: str
     numero_documento: str
-    fecha_emision: Optional[date]
+    fecha_emision: Optional[date] = None
 
 class DocumentoCreate(DocumentoBase):
     pass
 
 class Documento(DocumentoBase):
     id: int
+    created_at: Optional[datetime] = None
     class Config:
         from_attributes = True
 
 class DomicilioBase(BaseModel):
     calle: str
-    numero_ext: Optional[str]
-    numero_int: Optional[str]
-    colonia: Optional[str]
-    municipio: Optional[str]
-    estado: Optional[str]
-    cp: Optional[str]
+    numero_ext: Optional[str] = None
+    numero_int: Optional[str] = None
+    colonia: Optional[str] = None
+    municipio: Optional[str] = None
+    estado: Optional[str] = None
+    cp: Optional[str] = None
 
 class DomicilioCreate(DomicilioBase):
     pass
 
 class Domicilio(DomicilioBase):
     id: int
+    created_at: Optional[datetime] = None
     class Config:
         from_attributes = True
 
@@ -164,7 +172,7 @@ class ValoracionBase(BaseModel):
     paciente_id: int
     escala: str
     resultado: str
-    observaciones: Optional[str]
+    observaciones: Optional[str] = None
 
 class ValoracionCreate(ValoracionBase):
     pass
