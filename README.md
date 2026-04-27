@@ -168,29 +168,5 @@ erDiagram
     }
 ```
 
-## 🧪 Guía de Pruebas (JSONs)
 
-Para una revisión exitosa en Swagger (`/docs`), siga este orden lógico para mantener la integridad de los datos:
-
-### 1. Paciente (Base de todo)
-```json
-{ "nombre": "Angel de Jesus", "curp": "BATA050726HPLXLNA9" }
-```
-
-### 2. Nota Médica (Requiere Paciente 1 y Médico 1)
-```json
-{ "paciente_id": 1, "medico_id": 1, "contenido": "Paciente estable.", "tipo_nota": "Consulta" }
-```
-
-### 3. Diagnóstico (Requiere Nota 1)
-```json
-{ "nota_id": 1, "descripcion": "Revisión General", "codigo_cie": "Z00" }
-```
-
-### 4. Tratamiento (Requiere Diagnóstico 1)
-```json
-{ "diagnostico_id": 1, "medicamento": "Vitaminas", "dosis": "1 tableta", "frecuencia": "Diaria", "duracion": "30 dias" }
-```
-
----
 Desarrollado con ❤️ por el equipo de Registros Médicos.
