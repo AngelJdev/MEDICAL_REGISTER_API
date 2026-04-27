@@ -102,3 +102,4 @@ Todos los endpoints médicos requieren el encabezado `Authorization: Bearer <tok
 - **Domicilios**: `/api/medical/domicilios`
 - **Personas-Domicilio**: `/api/medical/personas-domicilio`
 - **Valoraciones**: `/api/medical/valoraciones`
+"# MEDICAL_REGISTER_API" 
