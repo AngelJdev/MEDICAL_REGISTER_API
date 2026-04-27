@@ -39,7 +39,7 @@ class NotaMedica(Base):
     tipo_nota = Column(Enum('Consulta', 'Evolución', 'Interconsulta'), default='Consulta')
     fecha = Column(DateTime, server_default=func.now())
     created_at = Column(DateTime, server_default=func.now())
-    
+
     paciente = relationship("Paciente", back_populates="notas")
     medico = relationship("User", back_populates="notas_creadas")
     diagnosticos = relationship("Diagnostico", back_populates="nota")
@@ -67,7 +67,7 @@ class Diagnostico(Base):
     descripcion = Column(Text, nullable=False)
     codigo_cie = Column(String(20))
     created_at = Column(DateTime, server_default=func.now())
-    
+
     nota = relationship("NotaMedica", back_populates="diagnosticos")
     tratamientos = relationship("Tratamiento", back_populates="diagnostico")
 
@@ -80,7 +80,7 @@ class Tratamiento(Base):
     frecuencia = Column(String(50))
     duracion = Column(String(50))
     created_at = Column(DateTime, server_default=func.now())
-    
+
     diagnostico = relationship("Diagnostico", back_populates="tratamientos")
 
 class Nacimiento(Base):
